@@ -1,0 +1,35 @@
+{
+  "name": "memoir-api",
+  "version": "0.0.1",
+  "description": "Memoir App API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/memoir-app/memoir-api.git"
+  },
+  "keywords": [
+    "album",
+    "family",
+    "memory",
+    "memories"
+  ],
+  "author": "albrewot",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/memoir-app/memoir-api/issues"
+  },
+  "homepage": "https://github.com/memoir-app/memoir-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
