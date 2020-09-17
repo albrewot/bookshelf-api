@@ -1,5 +1,6 @@
 //Controllers
-const testController = require("../controllers/test.controller");
+const authController = require("../modules/authentication/auth.controller");
+const userController = require("../modules/user/user.controller");
 
 module.exports = (app, express) => {
   app.get("/", (req, res, next) => {
@@ -8,7 +9,8 @@ module.exports = (app, express) => {
   });
 
   //Rutas
-  app.use("/api/test", testController);
+  app.use("/auth", authController);
+  app.use("/user", userController);
 
   //Router
   app.use(express.Router());

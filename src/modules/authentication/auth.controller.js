@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 //Services
-const testService = require("../services/test.service");
+const authStore = require("./auth.store");
 
 //End-Points
-router.get("/function", testFunction);
+router.get("/function", authFunction);
 
 module.exports = router;
 
-async function testFunction(req, res, next) {
+async function authFunction(req, res, next) {
   try {
-    const response = await testService.testMethod();
+    const response = await authStore.testMethod();
     if (response) {
       res.json({ message: "[TEST][GET REQUEST] Success", data: response });
     }

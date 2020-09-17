@@ -9,6 +9,7 @@ const routes = require("./src/routes");
 
 //Middlewares
 const app = express();
+const errorHandler = require("./src/middlewares/error.middleware");
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -16,6 +17,9 @@ app.use(express.json());
 
 //Routes
 routes(app, express);
+
+//Error Handling Middleware
+app.use(errorHandler);
 
 //Server Init
 app.listen(process.env.PORT, () => {
