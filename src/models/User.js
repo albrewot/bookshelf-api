@@ -9,7 +9,6 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    unique: true,
     required: [true, "missing password"],
   },
   name: {
@@ -22,6 +21,7 @@ const UserSchema = new Schema({
   },
   email: {
     type: String,
+    unique: true,
     required: [true, "missing email"],
   },
   bithdate: {
@@ -42,6 +42,13 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.set("toJSON", { virtuals: true });
+UserSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.password;
+  },
+});
 
 module.exports = mongoose.model("User", UserSchema);

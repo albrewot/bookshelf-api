@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/memoir-app/memoir-api#readme",
   "dependencies": {
+    "@hapi/joi": "15.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
