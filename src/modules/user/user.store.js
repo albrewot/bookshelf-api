@@ -4,10 +4,10 @@ const db = require("../../config/db");
 const { User } = db;
 
 class UserStore {
+  
   create = async (body) => {
     try {
       const valid = validate("register", body);
-      console.dir(valid);
       if (valid && valid.error) {
         throw valid.error;
       }

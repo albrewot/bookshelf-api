@@ -1,6 +1,8 @@
 //Controllers
 const authController = require("../modules/authentication/auth.controller");
 const userController = require("../modules/user/user.controller");
+const bookController = require("../modules/book/book.controller");
+
 
 module.exports = (app, express) => {
   app.get("/", (req, res, next) => {
@@ -11,6 +13,7 @@ module.exports = (app, express) => {
   //Rutas
   app.use("/auth", authController);
   app.use("/user", userController);
+  app.use("/book", bookController);
 
   //Router
   app.use(express.Router());
