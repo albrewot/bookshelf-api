@@ -1,16 +1,9 @@
 const bcrypt = require("bcryptjs");
-const validate = require("../../validations/user");
-const db = require("../../config/db");
-const { User } = db;
+const { User } = require("../../config/db");
 
 class UserStore {
-  
   create = async (body) => {
     try {
-      const valid = validate("register", body);
-      if (valid && valid.error) {
-        throw valid.error;
-      }
       if (await User.findOne({ username: body.username })) {
         throw {
           type: "TAKEN",
@@ -23,7 +16,12 @@ class UserStore {
           message: `E-Mail [${body.email}] is already in use`,
         };
       }
-      const user = new User(valid);
+      //Hash user password
+      const hash = await bcrypt.hash(body.password, 10);
+      if (hash) {
+        body = Object.assign(body, { password: hash });
+      }
+      const user = new User(body);
       const newUser = await User.create(user);
       if (newUser) {
         return newUser;

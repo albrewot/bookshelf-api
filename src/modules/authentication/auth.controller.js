@@ -1,20 +1,32 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 //Services
-const authStore = require("./auth.store");
+// const authStore = require("./auth.store");
+//Middlewares
+const {
+  hasValidAuthFields,
+  isPasswordUserMatch,
+} = require("./auth.middleware");
 
 //End-Points
-router.get("/function", authFunction);
+router.post("/", [hasValidAuthFields, isPasswordUserMatch], login);
 
 module.exports = router;
 
-async function authFunction(req, res, next) {
+async function login(req, res, next) {
   try {
-    const response = await authStore.testMethod();
-    if (response) {
-      res.json({ message: "[TEST][GET REQUEST] Success", data: response });
+    const token = jwt.sign(req.body, process.env.JWT_SECRET);
+    if (!token) {
+      throw {
+        type: "FAILURE",
+        message: "Login Failed",
+      };
     }
+    res.status(201).json({
+      access_token: token,
+    });
   } catch (error) {
-    console.log(err);
+    next(error);
   }
 }

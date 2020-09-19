@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const validateUser = require("../../validations/user");
 //Store
 const userStore = require("./user.store");
-const { ref } = require("@hapi/joi");
 
 //User Routes
 router.post("/register", register);
@@ -10,7 +10,11 @@ router.get("/:username", getUser);
 
 async function register(req, res, next) {
   try {
-    const response = await userStore.create(req.body);
+    const validBody = validateUser("register", req.body);
+    if (validBody && validBody.error) {
+      throw { message: validBody.error.join(" ,") };
+    }
+    const response = await userStore.create(validBody);
     res.send({ message: response });
   } catch (error) {
     next(error);

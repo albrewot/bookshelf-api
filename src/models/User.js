@@ -40,19 +40,26 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
-  user_books: [{
-    type: Schema.Types.ObjectId,
-    ref: "Book"
-  }]
+  user_books: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Book",
+    },
+  ],
 });
 
 UserSchema.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: function (doc, ret) {
+    console.log("HUEHUE");
     delete ret._id;
     delete ret.password;
   },
 });
+
+UserSchema.statics.findByEmail = async function (email) {
+  return await this.findOne({ email });
+};
 
 module.exports = mongoose.model("User", UserSchema);
