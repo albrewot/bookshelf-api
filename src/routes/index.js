@@ -3,7 +3,6 @@ const authController = require("../modules/authentication/auth.controller");
 const userController = require("../modules/user/user.controller");
 const bookController = require("../modules/book/book.controller");
 
-
 module.exports = (app, express) => {
   app.get("/", (req, res, next) => {
     console.log("[ROOT] Success");
@@ -14,9 +13,6 @@ module.exports = (app, express) => {
   app.use("/auth", authController);
   app.use("/user", userController);
   app.use("/book", bookController);
-
-  //Router
-  app.use(express.Router());
 
   //Not found
   app.use((req, res) => {

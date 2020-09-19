@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("../config/db");
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
@@ -52,7 +52,6 @@ UserSchema.set("toJSON", {
   virtuals: true,
   versionKey: false,
   transform: function (doc, ret) {
-    console.log("HUEHUE");
     delete ret._id;
     delete ret.password;
   },

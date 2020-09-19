@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 
 const AuthLoginSchema = Joi.object()
   .keys({
@@ -6,8 +6,7 @@ const AuthLoginSchema = Joi.object()
     email: Joi.string().email(),
     password: Joi.string().min(6).required(),
   })
-  .or("username", "email")
-  .options({ abortEarly: false });
+  .or("username", "email");
 
 module.exports = {
   AuthLoginSchema,

@@ -1,37 +1,18 @@
-const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 //Validation
-const validationSchemas = require("../../validations/auth/schemas");
-const validateAuth = require("../../validations/auth");
 //Model
-const { User } = require("../../config/db");
+const User = require("../../models/User");
 
 //TODO - REFACTOR & CHECK USER MODEL SETTINGS
-
-const hasValidAuthFields = (req, res, next) => {
-  try {
-    const validBody = validateAuth(validationSchemas.AuthLoginSchema, req.body);
-    if (validBody && validBody.error) {
-      throw { message: validBody.error.join(" ,") };
-    }
-    req.body = validBody;
-    return next();
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
 
 const isPasswordUserMatch = async (req, res, next) => {
   try {
     let user;
-    if (req.body.username) {
-      console.log(User);
-      user = await User.findOne({ username: req.body.username });
-    } else {
+    if (req.body.email) {
       user = await User.findOne({ email: req.body.email });
+    } else {
+      user = await User.findOne({ username: req.body.username });
     }
-    console.log(user);
     const hash = await bcrypt.compare(req.body.password, user.password);
     if (hash) {
       req.body = {
@@ -43,16 +24,12 @@ const isPasswordUserMatch = async (req, res, next) => {
       };
       return next();
     }
-    throw {
-      type: "FAILURE",
-      message: "Incorrect Password",
-    };
+    throw new Error("Incorrect Password");
   } catch (error) {
     next(error);
   }
 };
 
 module.exports = {
-  hasValidAuthFields,
   isPasswordUserMatch,
 };

@@ -8,7 +8,21 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 mongoose.Promise = global.Promise;
 
-module.exports = {
-  User: require("../models/User"),
-  Book: require("../models/Book"),
-};
+mongoose.connection
+  .once("open", () => {
+    console.log(
+      `MongoDB connection has been made | DB : [${process.env.MONGO_DB_NAME}]`
+    );
+  })
+  .on("error", (error) => {
+    console.log(
+      `MongoDB connection error | DB : [${process.env.MONGO_DB_NAME}] | Error : ${error}`
+    );
+  })
+  .on("disconnected", () => {
+    console.log(
+      `MongoDB connection ended | DB : [${process.env.MONGO_DB_NAME}]`
+    );
+  });
+
+module.exports = mongoose;
