@@ -70,6 +70,12 @@ const BookSchema = new Schema({
   },
 });
 
-BookSchema.set("toJSON", { virtuals: true });
+BookSchema.set("toJSON", { 
+  virtuals: true ,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+  },
+});
 
 module.exports = mongoose.model("Book", BookSchema);
