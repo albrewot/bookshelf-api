@@ -6,6 +6,7 @@ const Book = require("../../models/Book");
 class BookStore {
   create = async (body) => {
     try {
+      const userId = "5f6401dc1114466d493ac7d3";
       const validBody = bookRegisterValidator(body);
 
       if (validBody && validBody.error) {
@@ -19,24 +20,20 @@ class BookStore {
 
       if (isbnBook) {
         // TODO: get id user from token and validate
-        const userId = "5f6401dc1114466d493ac7d3";
 
         if (!isbnBook.current_owners.includes(userId)) {
           isbnBook.current_owners.push(userId);
           isbnBook.save();
         }
-
+        console.log(isbnBook);
         return isbnBook;
       }
-
+      validBody.current_owners = [userId];
       const newBook = new Book(validBody);
       const book = Book.create(newBook);
 
-      if (!newBook) {
-        throw {
-          type: "FAILURE",
-          message: "Unexpected error in db",
-        };
+      if (!book) {
+        throw new Error("Unexpected DB Error");
       }
 
       return book;
