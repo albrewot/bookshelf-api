@@ -1,1 +1,3 @@
 # MEMOIR APP API
+
+`RESTful API`

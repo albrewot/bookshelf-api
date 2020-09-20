@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("../config/db");
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
@@ -40,10 +40,12 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
-  user_books: [{
-    type: Schema.Types.ObjectId,
-    ref: "Book"
-  }]
+  user_books: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Book",
+    },
+  ],
 });
 
 UserSchema.set("toJSON", {
@@ -54,5 +56,9 @@ UserSchema.set("toJSON", {
     delete ret.password;
   },
 });
+
+UserSchema.statics.findByEmail = async function (email) {
+  return await this.findOne({ email });
+};
 
 module.exports = mongoose.model("User", UserSchema);
