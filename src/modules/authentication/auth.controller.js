@@ -1,3 +1,4 @@
+const AppError = require("../../errors/AppError");
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -16,7 +17,7 @@ async function login(req, res, next) {
   try {
     const token = jwt.sign(req.body, process.env.JWT_SECRET);
     if (!token) {
-      throw new Error("Login failed");
+      throw new AppError("Login failed");
     }
     res.status(201).json({
       access_token: token,

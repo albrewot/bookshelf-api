@@ -1,14 +1,15 @@
 const bcrypt = require("bcryptjs");
+const AppError = require("../../errors/AppError");
 const User = require("../../models/User");
 
 class UserStore {
   create = async (body) => {
     try {
       if (await User.findOne({ username: body.username })) {
-        throw new Error(`Username [${body.username}] is already taken`);
+        throw new AppError(`Username [${body.username}] is already taken`, 409);
       }
       if (await User.findOne({ email: body.email })) {
-        throw new Error(`E-Mail [${body.email}] is already in use`);
+        throw new AppError(`E-Mail [${body.email}] is already in use`, 409);
       }
 
       //Hash user password
@@ -31,11 +32,10 @@ class UserStore {
         if (user) {
           return user;
         }
-        throw new Error(`Username [${username}] was not found`);
+        throw new AppError(`Username [${username}] was not found`, 404);
       }
     } catch (error) {
-      console.log(error);
-      throw error.message;
+      throw error;
     }
   };
 }

@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const AppError = require("../../errors/AppError");
 //Validation
 //Model
 const User = require("../../models/User");
@@ -24,7 +25,7 @@ const isPasswordUserMatch = async (req, res, next) => {
       };
       return next();
     }
-    throw new Error("Incorrect Password");
+    throw new AppError("Incorrect Password", 400);
   } catch (error) {
     next(error);
   }
