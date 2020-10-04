@@ -1,3 +1,4 @@
+const AppError = require("../errors/AppError");
 const validator = require("../validations");
 
 const appValidator = (path, body) => {
@@ -18,7 +19,7 @@ module.exports = async (req, res, next) => {
   try {
     const validBody = appValidator(req.baseUrl + req.path, req.body);
     if (validBody && validBody.error) {
-      throw new Error(validBody.error);
+      throw new AppError(validBody.error, 400);
     }
     req.body = validBody;
     return next();

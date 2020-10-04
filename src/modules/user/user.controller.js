@@ -12,7 +12,7 @@ async function register(req, res, next) {
   try {
     const user = await userStore.create(req.body);
     res.send({
-      data: response,
+      data: user,
       message: `User [${user.username}] registered successfully`,
     });
   } catch (error) {
@@ -24,10 +24,10 @@ async function getUser(req, res, next) {
   try {
     if (req.params.username) {
       const user = await userStore.getUser(req.params.username);
-      if (response) {
+      if (user) {
         res.send({
           data: user,
-          message: `User [${response.username}] was retrieved successfully`,
+          message: `User [${user.username}] was retrieved successfully`,
         });
       }
     }
