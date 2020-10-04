@@ -6,6 +6,7 @@ const AppError = require('../../errors/AppError');
 // TODO: REFACTOR TO ALL!!!!! WARNING
 
 class BookStore {
+
   create = async (body) => {
     try {
       const userId = "5f6401dc1114466d493ac7d3";
@@ -35,12 +36,13 @@ class BookStore {
       const book = Book.create(newBook);
 
       if (!book) {
-        throw new AppError("Unexpected DB Error", 400);
+        throw new AppError("Unexpected DB Error", 403);
       }
 
       return book;
+
     } catch (error) {
-      throw new AppError(error, 400);
+      throw error;
     }
   };
 
@@ -60,21 +62,15 @@ class BookStore {
 
       if(0 === books.length){
         
-        try{
-          let googleBook = new GoogleBook();
+        let googleBook = new GoogleBook();
 
-          return await googleBook.findBooks(body);
-
-        }catch(error){
-          throw new AppError(error, 400);
-        }
-
+        return await googleBook.findBooks(body);
       }
 
       return books;
 
     } catch (error) {
-      throw new AppError(error, 400);
+      throw error;
     }
   }
 }

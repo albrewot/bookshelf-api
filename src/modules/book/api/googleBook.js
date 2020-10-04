@@ -12,7 +12,7 @@ class googleBook{
         let response = await axios.get(`volumes?q=${queryParams}&startIndex=${body.offset}`);
 
         if(!response.data){
-          throw new AppError("Libro no encontrado");
+          throw new AppError("Libro no encontrado", 404);
         }
 
         return response.data;
