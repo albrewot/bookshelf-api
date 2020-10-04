@@ -1,5 +1,6 @@
-const { bookRegisterValidator } = require("../../validations");
+const { bookRegisterValidator, bookFindValidator } = require("../../validations");
 const Book = require("../../models/Book");
+const GoogleBook = require('./api/googleBook');
 
 // TODO: REFACTOR TO ALL!!!!! WARNING
 
@@ -25,7 +26,7 @@ class BookStore {
           isbnBook.current_owners.push(userId);
           isbnBook.save();
         }
-        console.log(isbnBook);
+
         return isbnBook;
       }
       validBody.current_owners = [userId];
@@ -41,6 +42,40 @@ class BookStore {
       throw error;
     }
   };
+
+  find = async (body) => {
+
+    try {
+
+    const validBody = bookFindValidator(body);
+
+      if (validBody && validBody.error) {
+        throw new Error(validBody.error);
+      }
+
+      let books = await Book.find({
+        ...body
+      });
+
+      if(0 === books.length){
+        
+        try{
+          let googleBook = new GoogleBook();
+
+          return await googleBook.findBooks(body);
+
+        }catch(error){
+          throw error;
+        }
+
+      }
+
+      return books;
+
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new BookStore();
