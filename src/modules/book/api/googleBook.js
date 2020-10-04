@@ -1,5 +1,6 @@
 const axios = require("../../../config/axios");
 const { getQueryParams } = require('../../../helpers/book.helper');
+const AppError = require('../../../errors/AppError');
 
 class googleBook{
 
@@ -11,7 +12,7 @@ class googleBook{
         let response = await axios.get(`volumes?q=${queryParams}&startIndex=${body.offset}`);
 
         if(!response.data){
-          throw new Error("Libro no encontrado");
+          throw new AppError("Libro no encontrado");
         }
 
         return response.data;

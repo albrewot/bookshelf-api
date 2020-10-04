@@ -1,6 +1,7 @@
 const { bookRegisterValidator, bookFindValidator } = require("../../validations");
 const Book = require("../../models/Book");
 const GoogleBook = require('./api/googleBook');
+const AppError = require('../../errors/AppError');
 
 // TODO: REFACTOR TO ALL!!!!! WARNING
 
@@ -11,7 +12,7 @@ class BookStore {
       const validBody = bookRegisterValidator(body);
 
       if (validBody && validBody.error) {
-        throw new Error(validBody.error);
+        throw new AppError(validBody.error, 400);
       }
 
       const isbnBook = await Book.findOne({
@@ -34,12 +35,12 @@ class BookStore {
       const book = Book.create(newBook);
 
       if (!book) {
-        throw new Error("Unexpected DB Error");
+        throw new AppError("Unexpected DB Error", 400);
       }
 
       return book;
     } catch (error) {
-      throw error;
+      throw new AppError(error, 400);
     }
   };
 
@@ -47,10 +48,10 @@ class BookStore {
 
     try {
 
-    const validBody = bookFindValidator(body);
+      const validBody = bookFindValidator(body);
 
       if (validBody && validBody.error) {
-        throw new Error(validBody.error);
+        throw new AppError(validBody.error, 400);
       }
 
       let books = await Book.find({
@@ -65,7 +66,7 @@ class BookStore {
           return await googleBook.findBooks(body);
 
         }catch(error){
-          throw error;
+          throw new AppError(error, 400);
         }
 
       }
@@ -73,7 +74,7 @@ class BookStore {
       return books;
 
     } catch (error) {
-      throw error;
+      throw new AppError(error, 400);
     }
   }
 }
