@@ -16,6 +16,20 @@ const BookRegisterSchema = Joi.object().keys({
   //current_owners: Joi.array().items(Joi.string().required()),
 });
 
+const BookFindSchema = Joi.object()
+.keys({
+  title: Joi.string(),
+  publisher: Joi.string(),
+  isbn_10: Joi.string().min(10).max(10),
+  isbn_13: Joi.string().min(13).max(13),
+  categories: Joi.string(),
+  authors: Joi.string(),
+  language: Joi.string(),
+  offset: Joi.string().required(),
+})
+.or('title', 'isbn_10', 'isbn_13', 'publisher', 'authors');
+
 module.exports = {
   BookRegisterSchema,
+  BookFindSchema
 };
