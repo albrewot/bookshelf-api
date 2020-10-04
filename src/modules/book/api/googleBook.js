@@ -6,17 +6,14 @@ class googleBook{
 
     findBooks = async (body) =>
     {
-
-        let queryParams = getQueryParams(body);
-
-        let response = await axios.get(`volumes?q=${queryParams}&startIndex=${body.offset}`);
+        const queryParams = getQueryParams(body);
+        const response = await axios.get(`volumes?q=${queryParams}&startIndex=${body.offset}`);
 
         if(!response.data){
           throw new AppError("Libro no encontrado", 404);
         }
 
         return response.data;
-
     }
 }
 
