@@ -1,5 +1,6 @@
 const helpers = require("../errors/helpers");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const sendError = (error, res) => {
   if (error.isOperational) {
@@ -18,6 +19,7 @@ const sendError = (error, res) => {
 };
 
 module.exports = (error, req, res, next) => {
+  console.log(error);
   if (error) {
     error.statusCode = error.statusCode || 500;
     let parseError;
@@ -25,6 +27,12 @@ module.exports = (error, req, res, next) => {
       parseError = helpers.handleCastErrorDB(error);
     // if (error instanceof mongoose.Error.ValidationError)
     //   parseError = helpers.handleValidationErrorDB(error);
+    if (error instanceof jwt.JsonWebTokenError) {
+      parseError = helpers.handleJWTError(error);
+    }
+    if (error instanceof jwt.TokenExpiredError) {
+      parseError = helpers.handleJWTExpired(error);
+    }
     sendError(parseError ? parseError : error, res);
   }
 };

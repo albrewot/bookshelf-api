@@ -11,6 +11,16 @@ const handleCastErrorDB = (error) => {
 //   return new AppError(message, 400);
 // };
 
+const handleJWTError = (error) => {
+  const message = error.message;
+  return new AppError(message, 401);
+};
+
+const handleJWTExpired = (error) => {
+  const message = `${error.message} | expired at: ${error.expiredAt}`;
+  return new AppError(message, 401);
+};
+
 const sendErrorDev = (error, res) => {
   res.status(error.statusCode).json({
     error,
@@ -30,6 +40,8 @@ const sendErrorProd = (error, res) => {
 module.exports = {
   handleCastErrorDB,
   // handleValidationErrorDB,
+  handleJWTError,
+  handleJWTExpired,
   sendErrorDev,
   sendErrorProd,
 };
