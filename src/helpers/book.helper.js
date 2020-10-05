@@ -38,7 +38,7 @@ const getQueryParams = (body) => {
       params = params + '+' + selector + body[key];
 
     }
-    return params;
+    return params = params + `&startIndex=${body.offset}&langRestrict=${body.lang}`;
   }
 
 module.exports = {

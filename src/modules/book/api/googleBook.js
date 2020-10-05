@@ -7,7 +7,7 @@ class googleBook{
     findBooks = async (body) =>
     {
         const queryParams = getQueryParams(body);
-        const response = await axios.get(`volumes?q=${queryParams}&startIndex=${body.offset}`);
+        const response = await axios.get(`volumes?q=${queryParams}`);
 
         if(!response.data){
           throw new AppError("Libro no encontrado", 404);

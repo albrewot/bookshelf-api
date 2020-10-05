@@ -24,7 +24,7 @@ const BookFindSchema = Joi.object()
   isbn_13: Joi.string().min(13).max(13),
   categories: Joi.string(),
   authors: Joi.string(),
-  language: Joi.string(),
+  lang: Joi.string(),
   offset: Joi.string().required(),
 })
 .or('title', 'isbn_10', 'isbn_13', 'publisher', 'authors');
