@@ -17,7 +17,7 @@ const appValidator = (path, body) => {
 
 module.exports = async (req, res, next) => {
   try {
-    const validBody = appValidator(req.baseUrl + req.path, req.body);
+    const validBody = appValidator(req.originalUrl, req.body);
     if (validBody && validBody.error) {
       throw new AppError(validBody.error, 400);
     }
