@@ -1,4 +1,4 @@
-const helpers = require("../errors/helpers");
+const helpers = require("../helpers/error.helper");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
@@ -10,7 +10,6 @@ const sendError = (error, res) => {
       helpers.sendErrorProd(error, res);
     }
   } else {
-    // console.log("ERROR", error);
     res.status(500).json({
       status: error.statusCode,
       message: "Something went wrong",
@@ -19,7 +18,6 @@ const sendError = (error, res) => {
 };
 
 module.exports = (error, req, res, next) => {
-  console.log(error);
   if (error) {
     error.statusCode = error.statusCode || 500;
     let parseError;

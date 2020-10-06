@@ -1,6 +1,6 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const AppError = require("../errors/AppError");
+const { compareHash } = require("../helpers/password.helper");
 //Model
 const User = require("../models/User");
 
@@ -14,14 +14,14 @@ const isPasswordUserMatch = async (req, res, next) => {
     } else {
       user = await User.findOne({ username: req.body.username });
     }
-    const hash = await bcrypt.compare(req.body.password, user.password);
-    if (hash) {
+    const match = await compareHash(req.body.password, user.password);
+    if (match) {
       req.body = {
-        userid: user.id,
-        email: user.email,
-        username: user.username,
-        name: user.name,
-        lastname: user.lastname,
+        userId: user.id,
+        // email: user.email,
+        // username: user.username,
+        // name: user.name,
+        // lastname: user.lastname,
       };
       return next();
     }
@@ -38,9 +38,10 @@ const authGuard = (req, res, next) => {
       const bearerToken = bearerHeader.split(" ")[1];
       jwt.verify(bearerToken, process.env.JWT_SECRET, (error, data) => {
         if (!error) {
+          req.userId = data.userId;
+          console.log(req.userId);
           return next();
         }
-        console.log(error);
         next(error);
       });
     } else {

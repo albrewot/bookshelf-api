@@ -1,20 +1,18 @@
-const axios = require("../../../config/axios");
-const { getQueryParams } = require('../../../helpers/book.helper');
-const AppError = require('../../../errors/AppError');
+const { axiosGoogleBook } = require("../../../config/axios");
+const { getQueryParams } = require("../../../helpers/book.helper");
+const AppError = require("../../../errors/AppError");
 
-class googleBook{
+class googleBook {
+  findBooks = async (body) => {
+    const queryParams = getQueryParams(body);
+    const response = await axiosGoogleBook.get(`volumes?q=${queryParams}`);
 
-    findBooks = async (body) =>
-    {
-        const queryParams = getQueryParams(body);
-        const response = await axios.get(`volumes?q=${queryParams}`);
-
-        if(!response.data){
-          throw new AppError("Libro no encontrado", 404);
-        }
-
-        return response.data;
+    if (!response.data) {
+      throw new AppError("Libro no encontrado", 404);
     }
+
+    return response.data;
+  };
 }
 
 module.exports = googleBook;

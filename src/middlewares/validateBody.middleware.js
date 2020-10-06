@@ -2,10 +2,13 @@ const AppError = require("../errors/AppError");
 const validator = require("../validations");
 
 const appValidator = (path, body) => {
-  console.log("PATH", path);
   switch (path) {
     case "/user/register":
       return validator.userRegisterValidator(body);
+    case "/user/edit":
+      return validator.userEditValidator(body);
+    case "/user/edit/password":
+      return validator.userChangePasswordValidator(body);
     case "/books/create":
       return validator.bookRegisterValidator(body);
     case "/auth/":
