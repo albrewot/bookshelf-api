@@ -1,7 +1,7 @@
 {
-  "name": "memoir-api",
+  "name": "bookshelf-api",
   "version": "0.0.1",
-  "description": "Memoir App API",
+  "description": "Bookshelf App API",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/memoir-app/memoir-api.git"
+    "url": "git+https://github.com/throwback-app/bookshelf-api.git"
   },
   "keywords": [
     "album",
@@ -23,9 +23,9 @@
   "author": "albrewot",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/memoir-app/memoir-api/issues"
+    "url": "https://github.com/throwback-app/bookshelf-api/issues"
   },
-  "homepage": "https://github.com/memoir-app/memoir-api#readme",
+  "homepage": "https://github.com/throwback-app/bookshelf-api#readme",
   "dependencies": {
     "axios": "^0.20.0",
     "bcryptjs": "^2.4.3",
