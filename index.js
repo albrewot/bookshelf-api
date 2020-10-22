@@ -23,5 +23,6 @@ app.use(errorHandler);
 
 //Server Init
 app.listen(process.env.PORT, () => {
+  console.log(`Environment: ${process.env.NODE_ENV}`);
   console.log(`Server listening on PORT: ${process.env.PORT}`);
 });

@@ -2,6 +2,7 @@
 const authController = require("../modules/authentication/auth.controller");
 const userController = require("../modules/user/user.controller");
 const bookController = require("../modules/book/book.controller");
+const AppError = require("../errors/AppError");
 
 module.exports = (app, express) => {
   app.get("/", (req, res, next) => {
@@ -15,9 +16,7 @@ module.exports = (app, express) => {
   app.use("/book", bookController);
 
   //Not found
-  app.use((req, res) => {
-    res
-      .status(404)
-      .send({ message: `ERROR 404 | Route [${req.url}] NOT FOUND` });
+  app.all("*", (req, res, next) => {
+    next(new AppError(`ROUTE [${req.originalUrl}] NOT FOUND`, 404));
   });
 };

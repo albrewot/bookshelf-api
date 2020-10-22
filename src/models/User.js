@@ -1,4 +1,5 @@
 const mongoose = require("../config/db");
+const { passwordHash } = require("../helpers/password.helper");
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
@@ -55,6 +56,19 @@ UserSchema.set("toJSON", {
     delete ret._id;
     delete ret.password;
   },
+});
+
+UserSchema.pre("save", async function (next) {
+  try {
+    let user = this;
+    if (!user.isModified("password")) return next();
+    const hash = await passwordHash(user.password);
+    if (hash) {
+      user = Object.assign(user, { password: hash });
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 UserSchema.statics.findByEmail = async function (email) {

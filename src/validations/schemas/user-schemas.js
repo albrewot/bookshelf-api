@@ -8,6 +8,21 @@ const UserRegisterSchema = Joi.object().keys({
   lastname: Joi.string(),
 });
 
+const UserEditSchema = Joi.object().keys({
+  username: Joi.string(),
+  name: Joi.string(),
+  email: Joi.string().email(),
+  password: Joi.string().min(6),
+  lastname: Joi.string(),
+});
+
+const UserChangePasswordSchema = Joi.object().keys({
+  password: Joi.string().min(6).required(),
+  newPassword: Joi.string().min(6).required(),
+});
+
 module.exports = {
   UserRegisterSchema,
+  UserEditSchema,
+  UserChangePasswordSchema,
 };
