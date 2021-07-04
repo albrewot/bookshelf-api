@@ -5,10 +5,7 @@ const jwt = require("jsonwebtoken");
 //Services
 // const authStore = require("./auth.store");
 //Middlewares
-const {
-  isPasswordUserMatch,
-  authGuard,
-} = require("../../middlewares/auth.middleware");
+const { isPasswordUserMatch, authGuard } = require("../../middlewares/auth.middleware");
 const validateBody = require("../../middlewares/validateBody.middleware");
 
 //End-Points
@@ -27,6 +24,8 @@ async function login(req, res, next) {
     }
     res.status(201).json({
       access_token: token,
+      userId: req.body.userId,
+      expiresIn: 7200000,
     });
   } catch (error) {
     next(error);

@@ -1,7 +1,6 @@
 const Joi = require("joi");
 
 const UserRegisterSchema = Joi.object().keys({
-  username: Joi.string().required(),
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
@@ -9,11 +8,13 @@ const UserRegisterSchema = Joi.object().keys({
 });
 
 const UserEditSchema = Joi.object().keys({
-  username: Joi.string(),
   name: Joi.string(),
   email: Joi.string().email(),
   password: Joi.string().min(6),
   lastname: Joi.string(),
+  gender: Joi.string(),
+  birthdate: Joi.date(),
+  // profile_picture: Joi.string(),
 });
 
 const UserChangePasswordSchema = Joi.object().keys({

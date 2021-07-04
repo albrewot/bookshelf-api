@@ -1,4 +1,7 @@
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
+const path = require("path");
+const dir = path.join(global.rootPath, "/public/images/pfp/");
 const AppError = require("../../errors/AppError");
 const { compareHash } = require("../../helpers/password.helper");
 const User = require("../../models/User");
@@ -6,9 +9,6 @@ const User = require("../../models/User");
 class UserStore {
   create = async (body) => {
     try {
-      if (await User.findOne({ username: body.username })) {
-        throw new AppError(`Username [${body.username}] is already taken`, 409);
-      }
       if (await User.findOne({ email: body.email })) {
         throw new AppError(`E-Mail [${body.email}] is already in use`, 409);
       }
@@ -26,12 +26,25 @@ class UserStore {
     }
   };
 
-  edit = async (userId, body) => {
+  edit = async (userId, body, filename = null) => {
     try {
       const user = await User.findById(userId);
       if (!user) {
         throw new AppError(`User not found`, 404);
       }
+      if (filename && user.profile_picture && user.profile_picture !== body.profile_picture) {
+        const userPfp = user.profile_picture.split("/").pop();
+        const fileExists = fs.existsSync(dir + userPfp);
+        if (fileExists) {
+          fs.unlink(dir + userPfp, (err) => {
+            if (err) {
+              console.log("UNLINK ERROR", err);
+              throw err;
+            }
+          });
+        }
+      }
+      //console.log
       Object.assign(user, body);
       const editedUser = await user.save();
       return editedUser;
@@ -58,14 +71,14 @@ class UserStore {
     }
   };
 
-  getUser = async (username) => {
+  getUser = async (userId) => {
     try {
-      if (username) {
-        const user = await User.findOne({ username });
+      if (userId) {
+        const user = await User.findById(userId);
         if (user) {
           return user;
         }
-        throw new AppError(`Username [${username}] was not found`, 404);
+        throw new AppError(`User [${userId}] was not found`, 404);
       }
     } catch (error) {
       throw error;

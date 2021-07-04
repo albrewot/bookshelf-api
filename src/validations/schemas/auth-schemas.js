@@ -1,12 +1,9 @@
 const Joi = require("joi");
 
-const AuthLoginSchema = Joi.object()
-  .keys({
-    username: Joi.string(),
-    email: Joi.string().email(),
-    password: Joi.string().min(6).required(),
-  })
-  .or("username", "email");
+const AuthLoginSchema = Joi.object().keys({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+});
 
 module.exports = {
   AuthLoginSchema,

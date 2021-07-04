@@ -3,11 +3,6 @@ const { passwordHash } = require("../helpers/password.helper");
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  username: {
-    type: String,
-    unique: true,
-    required: [true, "missing username"],
-  },
   password: {
     type: String,
     required: [true, "missing password"],
@@ -25,7 +20,7 @@ const UserSchema = new Schema({
     unique: true,
     required: [true, "missing email"],
   },
-  bithdate: {
+  birthdate: {
     type: Date,
     default: null,
   },
