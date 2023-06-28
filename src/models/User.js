@@ -1,6 +1,7 @@
 const mongoose = require("../config/db");
 const { passwordHash } = require("../helpers/password.helper");
 const { Schema } = mongoose;
+const uuid = require("uuid").v4;
 
 const UserSchema = new Schema({
   password: {
@@ -15,10 +16,25 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
+  username: {
+    type: String,
+    unique: true,
+    required: [true, "missing username"],
+  },
+  customerID: {
+    type: String,
+    unique: true,
+    required: [true, "missing CustomerID"],
+  },
   email: {
     type: String,
     unique: true,
     required: [true, "missing email"],
+  },
+  secret: {
+    type: String,
+    unique: true,
+
   },
   birthdate: {
     type: Date,
@@ -50,12 +66,16 @@ UserSchema.set("toJSON", {
   transform: function (doc, ret) {
     delete ret._id;
     delete ret.password;
+    delete ret.secret;
   },
 });
 
 UserSchema.pre("save", async function (next) {
   try {
     let user = this;
+    if(this.isNew){
+      user = Object.assign(user, { secret: uuid()});
+    }
     if (!user.isModified("password")) return next();
     const hash = await passwordHash(user.password);
     if (hash) {

@@ -1,5 +1,5 @@
 //Environtment config
-require("dotenv").config();
+require('dotenv').config({ path:`${__dirname}/.env`})
 //Libraries
 const express = require("express");
 const path = require("path");

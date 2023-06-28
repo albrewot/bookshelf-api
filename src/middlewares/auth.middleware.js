@@ -15,7 +15,8 @@ const isPasswordUserMatch = async (req, res, next) => {
       req.body = {
         userId: user.id,
         // email: user.email,
-        // username: user.username,
+        username: user.username,
+        secret: user.secret,
         // name: user.name,
         // lastname: user.lastname,
       };

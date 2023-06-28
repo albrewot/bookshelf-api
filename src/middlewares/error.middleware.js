@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 
 const sendError = (error, res) => {
   if (error.isOperational) {
-    if ((process.env.NODE_ENV.trim() || "") === "development") {
+    if ((process.env.NODE_ENV.trim() || "") === "dev") {
       helpers.sendErrorDev(error, res);
-    } else if ((process.env.NODE_ENV.trim() || "") === "production") {
+    } else if ((process.env.NODE_ENV.trim() || "") === "prod") {
       helpers.sendErrorProd(error, res);
     }
   } else {

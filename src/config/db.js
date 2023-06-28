@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(`${process.env.MONGODB_URI}${process.env.MONGO_DB_NAME}`, {
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,

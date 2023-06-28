@@ -5,6 +5,8 @@ const UserRegisterSchema = Joi.object().keys({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
   lastname: Joi.string(),
+  username: Joi.string().required(),
+  customerID: Joi.string().required(),
 });
 
 const UserEditSchema = Joi.object().keys({

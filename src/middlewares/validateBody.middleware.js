@@ -11,7 +11,7 @@ const appValidator = (path, body) => {
       return validator.userChangePasswordValidator(body);
     case "/books/create":
       return validator.bookRegisterValidator(body);
-    case "/auth":
+    case "/auth/login":
       return validator.authValidator(body);
     default:
       return { error: "Invalid request" };
