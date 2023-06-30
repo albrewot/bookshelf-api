@@ -38,14 +38,14 @@ async function checkSMS(req, res, next) {
     if (!req.body.signUpTicket || !req.body.sms) {
       throw AppError("SMS Verification Failed | Missing fields");
     }
-    if (req.body.sms != "000000") {
+    if (req.body.sms !== "000000") {
       throw AppError("Invalid SMS code");
     }
-    const { username, secret } = User.findOne({ username: "albcastle17" });
-    return {
+    const { username, secret } = await User.findOne({ username: "albcastle17" });
+    res.json({
       userName: username,
       userSecret: secret,
-    }
+    });
   } catch (error) {
     next(error);
   }
@@ -117,15 +117,14 @@ async function secret(req, res, next) {
     if (!secret) {
       throw new AppError("Login failed | field not provided");
     }
-    const user = User.findOne({ secret: secret });
+    const { id , username, ...user } = await User.findOne({ secret: secret });
     if (!user) {
       throw new AppError("Login failed | User Not Found");
     }
-    const { userId, username } = user;
-    const token = jwt.sign({ userId, username }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: id, username }, process.env.JWT_SECRET, {
       expiresIn: "2h",
     });
-    const refresh = jwt.sign({ username: username }, process.env.JWT_REFRESH_SECRET, {
+    const refresh = jwt.sign({ username }, process.env.JWT_REFRESH_SECRET, {
       expiresIn: '12d',
     });
     if (!token || !refresh) {
@@ -135,8 +134,8 @@ async function secret(req, res, next) {
       access_token: token,
       refresh_token: refresh,
       secret: req.body.secret,
-      userId: req.body.userId,
-      username: req.body.username,
+      userId: id,
+      username: username,
       // expiresIn: 7200000,
     });
   } catch (error) {
