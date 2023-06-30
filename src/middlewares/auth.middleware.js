@@ -8,7 +8,7 @@ const User = require("../models/User");
 
 const isPasswordUserMatch = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email, username: req.body.username });
 
     const match = await compareHash(req.body.password, user.password);
     if (match) {

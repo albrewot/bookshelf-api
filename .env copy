@@ -1,0 +1,9 @@
+NODE_ENV=dev
+PORT=3001
+URL=
+MONGO_DB_NAME=auth
+MONGODB_URI=mongodb+srv://albrewot:Soporte03.@auth.3jah0ac.mongodb.net/
+JWT_SECRET=unelefantesebalanceaba
+JWT_REFRESH_SECRET=refersh_secret
+GOOGLE_BOOK_API_KEY=
+GOOGLE_BOOK_URI=https://www.googleapis.com/books/v1/
