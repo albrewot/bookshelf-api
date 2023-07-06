@@ -51,9 +51,12 @@ const authGuard = (req, res, next) => {
 const passGuard = (req, res, next) => {
   try {
     const basicHeader = req.headers.authorization;
+    console.log(basicHeader);
     if (typeof basicHeader !== "undefined") {
       const basicCreds = basicHeader.split(" ")[1];
+      console.log(basicCreds);
       const decoded = atob(basicCreds);
+      console.log(decoded);
       const [username, password] = decoded.split(":");
       if (username !== "username" && password !== "password") {
         throw new AppError("Basic Authentication Failed");

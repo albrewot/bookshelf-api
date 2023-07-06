@@ -70,6 +70,7 @@ async function basicAuth(req, res, next) {
   try {
     const { grant_type, username, password, refreshToken } = req.body;
     let user;
+    console.log(grant_type, username, password, refreshToken);
     if (grant_type == "SECRET") {
       if (!username || !password) {
         throw new AppError("No Credentials provided");
@@ -131,6 +132,7 @@ async function basicAuth(req, res, next) {
     }
 
   } catch (error) {
+    console.log(error);
     next(error);
   }
 }
