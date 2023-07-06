@@ -13,7 +13,7 @@ const validateBody = require("../../middlewares/validateBody.middleware");
 //End-Points
 router.post("/login", [validateBody, isPasswordUserMatch], login);
 router.post("/vinculate", [isPasswordUserMatch], vinculate);
-router.post("/check_sms", checkSMS)
+router.post("/sms", checkSMS)
 router.post("/authenticate", [passGuard], basicAuth);
 router.get("/test", [authGuard], test);
 
@@ -22,10 +22,14 @@ module.exports = router;
 async function vinculate(req, res, next) {
   try {
     res.json({
-      signUpTicket: uuid(),
-      coordsChallenge: null,
-      id: "V23000841",
-      amiVen: false,
+      code: 1000,
+      data: {
+        signUpTicket: uuid(),
+        coordsChallenge: null,
+        identification: req.body.identification,
+        amiVen: "FALSE",
+      },
+      message: "Peticion realizada con exito"
     });
   } catch (error) {
     next(error);
@@ -34,16 +38,20 @@ async function vinculate(req, res, next) {
 
 async function checkSMS(req, res, next) {
   try {
-    if (!req.body.signUpTicket || !req.body.sms) {
+    if (!req.body.ticket || !req.body.af) {
       throw AppError("SMS Verification Failed | Missing fields");
     }
-    if (req.body.sms !== "000000") {
+    if (req.body.af !== "000000") {
       throw AppError("Invalid SMS code");
     }
     const { username, secret } = await User.findOne({ username: "albcastle17" });
     res.json({
-      userName: username,
-      userSecret: secret,
+      code: 1000,
+      data: {
+        userName: username,
+        userSecret: secret,
+      },
+      message: "Vinculacion exitosa",
     });
   } catch (error) {
     next(error);
@@ -78,17 +86,17 @@ async function login(req, res, next) {
 
 async function basicAuth(req, res, next) {
   try {
-    const { type, username, secret, refreshToken } = req.body;
+    const { grant_type, username, password, refreshToken } = req.body;
     let user;
-    if (type == "SECRET") {
-      if (!username || !secret) {
+    if (grant_type == "SECRET") {
+      if (!username || !password) {
         throw new AppError("No Credentials provided");
       }
       user = await User.findOne({ username: username });
       if (!user) {
         throw new AppError("Login failed | User Not Found");
       }
-      if (user.secret !== secret) {
+      if (user.secret !== password) {
         throw new AppError("Login failed | Secret doesn't match");
       }
       const token = jwt.sign({ userId: user.userId, username }, process.env.JWT_SECRET, {
@@ -108,7 +116,7 @@ async function basicAuth(req, res, next) {
         username: user.username,
         // expiresIn: 7200000,
       });
-    } else {
+    } else if (grant_type === "REFRESH") {
       const { username } = jwt.decode(refreshToken);
       let user;
       if (!username) {
@@ -136,7 +144,10 @@ async function basicAuth(req, res, next) {
         username: username,
         // expiresIn: 7200000,
       });
+    } else {
+      throw AppError("Invalid AUTH Request")
     }
+    
   } catch (error) {
     next(error);
   }

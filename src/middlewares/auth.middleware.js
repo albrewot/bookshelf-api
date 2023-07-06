@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const AppError = require("../errors/AppError");
-const { compareHash } = require("../helpers/password.helper");
+const { compareHas, compare256Hash } = require("../helpers/password.helper");
 //Model
 const User = require("../models/User");
 
@@ -9,10 +9,11 @@ const User = require("../models/User");
 const isPasswordUserMatch = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    const match = await compareHash(req.body.password, user.password);
+    // const match = await compareHash(req.body.password, user.password);
+    const match = await compare256Hash(req.body.password, user.password);
     if (match) {
       req.body = {
-        userId: user.id,
+        identification: user.id,
         // email: user.email,
         username: user.username,
         secret: user.secret,
@@ -54,7 +55,7 @@ const passGuard = (req, res, next) => {
       const basicCreds = basicHeader.split(" ")[1];
       const decoded = atob(basicCreds);
       const [username, password] = decoded.split(":");
-      if (username !== "usuario" && password !== "password") {
+      if (username !== "username" && password !== "password") {
         throw new AppError("Basic Authentication Failed");
       }
       return next();

@@ -77,8 +77,11 @@ async function getUser(req, res, next) {
     const user = await userStore.getUser(req.username);
     if (user) {
       res.send({
-        user: user,
-        message: `User [${user.email}] was retrieved successfully`,
+        code: 1000,
+        data: {
+          user: user,
+        },
+        message: `User [${user.username}] was retrieved successfully`,
       });
     }
   } catch (error) {

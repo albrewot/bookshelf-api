@@ -1,5 +1,5 @@
 const mongoose = require("../config/db");
-const { passwordHash } = require("../helpers/password.helper");
+const { passwordHash, password256Hash } = require("../helpers/password.helper");
 const { Schema } = mongoose;
 const uuid = require("uuid").v4;
 
@@ -77,7 +77,8 @@ UserSchema.pre("save", async function (next) {
       user = Object.assign(user, { secret: uuid()});
     }
     if (!user.isModified("password")) return next();
-    const hash = await passwordHash(user.password);
+    // const hash = await passwordHash(user.password);
+    const hash = await password256Hash(user.password);
     if (hash) {
       user = Object.assign(user, { password: hash });
     }
