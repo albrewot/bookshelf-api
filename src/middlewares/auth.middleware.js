@@ -13,7 +13,7 @@ const isPasswordUserMatch = async (req, res, next) => {
     const match = await compare256Hash(req.body.password, user.password);
     if (match) {
       req.body = {
-        identification: user.id,
+        identification: user.customerID,
         // email: user.email,
         username: user.username,
         secret: user.secret,

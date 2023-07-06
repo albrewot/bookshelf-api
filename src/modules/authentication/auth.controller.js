@@ -60,25 +60,7 @@ async function checkSMS(req, res, next) {
 
 async function login(req, res, next) {
   try {
-    console.log(req.body);
-    const { secret, ...body } = req.body;
-    const token = jwt.sign(body, process.env.JWT_SECRET, {
-      expiresIn: "2h",
-    });
-    const refresh = jwt.sign({ username: req.body.username }, process.env.JWT_REFRESH_SECRET, {
-      expiresIn: '12d',
-    });
-    if (!token || !refresh) {
-      throw new AppError("Login failed");
-    }
-    res.status(201).json({
-      access_token: token,
-      refresh_token: refresh,
-      secret: req.body.secret,
-      userId: req.body.userId,
-      username: req.body.username,
-      // expiresIn: 7200000,
-    });
+    res.send(true);
   } catch (error) {
     next(error);
   }
@@ -147,7 +129,7 @@ async function basicAuth(req, res, next) {
     } else {
       throw AppError("Invalid AUTH Request")
     }
-    
+
   } catch (error) {
     next(error);
   }
