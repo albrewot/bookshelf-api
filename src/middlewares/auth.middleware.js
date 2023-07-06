@@ -4,7 +4,7 @@ const { compareHash } = require("../helpers/password.helper");
 //Model
 const User = require("../models/User");
 
-//TODO: REFACTOR & CHECK USER MODEL SETTINGS
+//TODO - REFACTOR & CHECK USER MODEL SETTINGS
 
 const isPasswordUserMatch = async (req, res, next) => {
   try {
@@ -52,7 +52,8 @@ const passGuard = (req, res, next) => {
     const basicHeader = req.headers.authorization;
     if (typeof basicHeader !== "undefined") {
       const basicCreds = basicHeader.split(" ")[1];
-      const [username, password] = basicCreds.split(":");
+      const decoded = atob(basicCreds);
+      const [username, password] = decoded.split(":");
       if (username !== "usuario" && password !== "password") {
         throw new AppError("Basic Authentication Failed");
       }
