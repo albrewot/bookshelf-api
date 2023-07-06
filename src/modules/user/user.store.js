@@ -71,14 +71,14 @@ class UserStore {
     }
   };
 
-  getUser = async (userId) => {
+  getUser = async (username) => {
     try {
-      if (userId) {
-        const user = await User.findById(userId);
+      if (username) {
+        const user = await User.find({username});
         if (user) {
           return user;
         }
-        throw new AppError(`User [${userId}] was not found`, 404);
+        throw new AppError(`User [${username}] was not found`, 404);
       }
     } catch (error) {
       throw error;

@@ -8,7 +8,7 @@ const validateBody = require("../../middlewares/validateBody.middleware");
 const { authGuard } = require("../../middlewares/auth.middleware");
 const { pfpUpload } = require("../../config/multer");
 //User Routes
-router.get("/", [authGuard], getUser);
+router.get("/get", [authGuard], getUser);
 router.post("/register", [validateBody], register);
 router.put("/edit", [authGuard, validateBody], editUser);
 router.put("/edit/pfp", [authGuard], editProfilePicture);
@@ -74,7 +74,7 @@ async function editProfilePicture(req, res, next) {
 
 async function getUser(req, res, next) {
   try {
-    const user = await userStore.getUser(req.userId);
+    const user = await userStore.getUser(req.username);
     if (user) {
       res.send({
         user: user,

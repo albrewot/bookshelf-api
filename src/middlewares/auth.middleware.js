@@ -34,7 +34,7 @@ const authGuard = (req, res, next) => {
       const bearerToken = bearerHeader.split(" ")[1];
       jwt.verify(bearerToken, process.env.JWT_SECRET, (error, data) => {
         if (!error) {
-          req.userId = data.userId;
+          req.username = data.username;
           return next();
         }
         next(error);

@@ -76,40 +76,6 @@ async function login(req, res, next) {
   }
 }
 
-async function refresh(req, res, next) {
-  try {
-    const { username } = jwt.decode(req.body.refresh);
-    let user;
-    if (!username) {
-      throw new AppError("Login failed | Invalid TOken");
-    }
-    user = await User.findOne({ username: username });
-    if (!user) {
-      throw new AppError("Login failed | User Not Found");
-    }
-    const { userId, secret } = user;
-    const token = jwt.sign({ userId, username }, process.env.JWT_SECRET, {
-      expiresIn: "2h",
-    });
-    const refresh = jwt.sign({ username: username }, process.env.JWT_REFRESH_SECRET, {
-      expiresIn: '12d',
-    });
-    if (!token || !refresh) {
-      throw new AppError("Login failed | Error while signing in");
-    }
-    res.status(201).json({
-      access_token: token,
-      refresh_token: refresh,
-      secret: secret,
-      userId: userId,
-      username: username,
-      // expiresIn: 7200000,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-
 async function basicAuth(req, res, next) {
   try {
     const { type, username, secret, refreshToken } = req.body;
@@ -171,38 +137,6 @@ async function basicAuth(req, res, next) {
         // expiresIn: 7200000,
       });
     }
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function secret(req, res, next) {
-  try {
-    const { secret } = req.body;
-    if (!secret) {
-      throw new AppError("Login failed | field not provided");
-    }
-    const { id, username, ...user } = await User.findOne({ secret: secret });
-    if (!user) {
-      throw new AppError("Login failed | User Not Found");
-    }
-    const token = jwt.sign({ userId: id, username }, process.env.JWT_SECRET, {
-      expiresIn: "2h",
-    });
-    const refresh = jwt.sign({ username }, process.env.JWT_REFRESH_SECRET, {
-      expiresIn: '12d',
-    });
-    if (!token || !refresh) {
-      throw new AppError("Login failed | Error while signing in");
-    }
-    res.status(201).json({
-      access_token: token,
-      refresh_token: refresh,
-      secret: req.body.secret,
-      userId: id,
-      username: username,
-      // expiresIn: 7200000,
-    });
   } catch (error) {
     next(error);
   }
