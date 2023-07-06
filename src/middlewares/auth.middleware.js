@@ -55,7 +55,8 @@ const passGuard = (req, res, next) => {
     if (typeof basicHeader !== "undefined") {
       const basicCreds = basicHeader.split(" ")[1];
       console.log(basicCreds);
-      const decoded = atob(basicCreds);
+      const buffer = Buffer.from(basicCreds, "base64");
+      const decoded = buffer.toString("ascii");
       console.log(decoded);
       const [username, password] = decoded.split(":");
       if (username !== "username" && password !== "password") {
