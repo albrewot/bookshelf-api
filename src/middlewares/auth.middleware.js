@@ -4,11 +4,11 @@ const { compareHash } = require("../helpers/password.helper");
 //Model
 const User = require("../models/User");
 
-//TODO - REFACTOR & CHECK USER MODEL SETTINGS
+//TODO: REFACTOR & CHECK USER MODEL SETTINGS
 
 const isPasswordUserMatch = async (req, res, next) => {
   try {
-    const user = await User.findOne({username: req.body.username });
+    const user = await User.findOne({ username: req.body.username });
     const match = await compareHash(req.body.password, user.password);
     if (match) {
       req.body = {
@@ -47,7 +47,26 @@ const authGuard = (req, res, next) => {
   }
 };
 
+const passGuard = (req, res, next) => {
+  try {
+    const basicHeader = req.headers.authorization;
+    if (typeof basicHeader !== "undefined") {
+      const basicCreds = basicHeader.split(" ")[1];
+      const [username, password] = basicCreds.split(":");
+      if (username !== "usuario" && password !== "password") {
+        throw new AppError("Basic Authentication Failed");
+      }
+      return next();
+    } else {
+      throw new AppError("Unauthenticated | No Basic provided", 401);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   isPasswordUserMatch,
   authGuard,
+  passGuard,
 };
