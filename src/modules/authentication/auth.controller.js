@@ -38,13 +38,13 @@ async function vinculate(req, res, next) {
 
 async function checkSMS(req, res, next) {
   try {
-    if (!req.body.ticket || !req.body.af || !req.body.username) {
-      throw AppError("SMS Verification Failed | Missing fields");
+    if (!req.body.ticket || !req.body.af || !req.body.userName) {
+      throw new AppError("SMS Verification Failed | Missing fields");
     }
     if (req.body.af !== "000000") {
-      throw AppError("Invalid SMS code");
+      throw new AppError("Invalid SMS code");
     }
-    const { username, secret } = await User.findOne({ username: req.body.username });
+    const { username, secret } = await User.findOne({ username: req.body.userName.toLowerCase() });
     res.json({
       code: 1000,
       data: {
