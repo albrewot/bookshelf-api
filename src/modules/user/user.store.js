@@ -9,8 +9,13 @@ const User = require("../../models/User");
 class UserStore {
   create = async (body) => {
     try {
-      if (await User.findOne({ email: body.email })) {
-        throw new AppError(`E-Mail [${body.email}] is already in use`, 409);
+      const found = await User.find({"$or": [
+        { username: body.username },
+        { email: body.email },
+        { customerID: body.customerID }
+      ],})
+      if (found.length > 0) {
+        throw new AppError(`Unique Field is already in use`, 409);
       }
 
       //Hash user password
